@@ -1,0 +1,2 @@
+#define PREDICTBRIDGE_API __declspec(dllexport)
+#define PREDICTBRIDGE_API __declspec(dllimport)
