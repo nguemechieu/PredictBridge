@@ -1,10 +1,10 @@
-﻿  dllmain.cpp
-C:\Users\nguem\OneDrive\source\PredictBridge\dllmain.cpp(4,22): warning C4008: 'DllMain': 'static' attribute ignored
-  (compiling source file '/dllmain.cpp')
-  
-     Creating library C:\Users\nguem\OneDrive\source\PredictBridge\Release\PredictBridge.lib and object C:\Users\nguem\OneDrive\source\PredictBridge\Release\PredictBridge.exp
+﻿  PredictBridge.cpp
+  dllmain.cpp
+     Creating library C:\Users\nguem\Documents\GitHub\PredictBridge\Release\PredictBridge.lib and object C:\Users\nguem\Documents\GitHub\PredictBridge\Release\PredictBridge.exp
   Generating code
   Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 104 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 118 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
-  PredictBridge.vcxproj -> C:\Users\nguem\OneDrive\source\PredictBridge\Release\PredictBridge.dll
+  PredictBridge.vcxproj -> C:\Users\nguem\Documents\GitHub\PredictBridge\Release\PredictBridge.dll
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
