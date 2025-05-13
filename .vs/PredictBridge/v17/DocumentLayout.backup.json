@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{81ED58AD-3CD4-46A2-B0B4-CAEF387F44D8}|PredictBridge.vcxproj|solutionrelative:PredictBridge.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{81ED58AD-3CD4-46A2-B0B4-CAEF387F44D8}|PredictBridge.vcxproj|C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{81ED58AD-3CD4-46A2-B0B4-CAEF387F44D8}|PredictBridge.vcxproj|solutionrelative:dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{81ED58AD-3CD4-46A2-B0B4-CAEF387F44D8}|PredictBridge.vcxproj|C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\PredictBridge.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{81ED58AD-3CD4-46A2-B0B4-CAEF387F44D8}|PredictBridge.vcxproj|solutionrelative:PredictBridge.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\CppProperties.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CppProperties.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{81ED58AD-3CD4-46A2-B0B4-CAEF387F44D8}|PredictBridge.vcxproj|C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{81ED58AD-3CD4-46A2-B0B4-CAEF387F44D8}|PredictBridge.vcxproj|solutionrelative:dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,20 +38,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PredictBridge.h",
-              "DocumentMoniker": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\PredictBridge.h",
-              "RelativeDocumentMoniker": "PredictBridge.h",
-              "ToolTip": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\PredictBridge.h",
-              "RelativeToolTip": "PredictBridge.h",
-              "ViewState": "AgIAABsAAAAAAAAAAAAwwDgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-05-13T07:38:21.012Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "CppProperties.json",
               "DocumentMoniker": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\CppProperties.json",
               "RelativeDocumentMoniker": "CppProperties.json",
@@ -63,7 +50,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "PredictBridgeEntry.cpp",
               "DocumentMoniker": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\PredictBridgeEntry.cpp",
               "RelativeDocumentMoniker": "PredictBridgeEntry.cpp",
@@ -80,10 +67,30 @@
               "RelativeDocumentMoniker": "PredictBridge.cpp",
               "ToolTip": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\PredictBridge.cpp",
               "RelativeToolTip": "PredictBridge.cpp",
-              "ViewState": "AgIAAOwAAAAAAAAAAAAAAAcBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAkwIwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-05-12T23:01:29.65Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{9a7cebbb-dc5c-4986-bc49-962da46aa506}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PredictBridge.h",
+              "DocumentMoniker": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\PredictBridge.h",
+              "RelativeDocumentMoniker": "PredictBridge.h",
+              "ToolTip": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\PredictBridge.h",
+              "RelativeToolTip": "PredictBridge.h",
+              "ViewState": "AgIAABsAAAAAAAAAAAAwwDgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-05-13T07:38:21.012Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
             },
             {
               "$type": "Bookmark",
@@ -91,15 +98,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "dllmain.cpp",
               "DocumentMoniker": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\dllmain.cpp",
               "RelativeDocumentMoniker": "dllmain.cpp",
-              "ToolTip": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\dllmain.cpp*",
-              "RelativeToolTip": "dllmain.cpp*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\nguem\\Documents\\GitHub\\PredictBridge\\dllmain.cpp",
+              "RelativeToolTip": "dllmain.cpp",
+              "ViewState": "AgIAABYAAAAAAAAAAAAAAAAAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-12T23:01:15.056Z"
+              "WhenOpened": "2025-05-12T23:01:15.056Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",

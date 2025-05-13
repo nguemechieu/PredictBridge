@@ -1,5 +1,5 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
-  
+ 
 #include "pch.h"  
 #include "framework.h"
 #include <winsock2.h>
@@ -11,6 +11,7 @@
 #include "PredictBridge.h"
 #include <iostream>
 #include <fstream>
+
 BOOL APIENTRY DllMain(HMODULE hModule,  
                             DWORD  ul_reason_for_call,  
                             LPVOID lpReserved)  
@@ -19,8 +20,6 @@ BOOL APIENTRY DllMain(HMODULE hModule,
    {  
    case DLL_PROCESS_ATTACH:
 	   // Perform any necessary initialization here
-
-
 	   break;
    case DLL_THREAD_ATTACH:
 	   // Perform any necessary thread-specific initialization here
