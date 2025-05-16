@@ -1,26 +1,33 @@
-// PredictBridge.cpp : Defines the exported functions for the DLL.
 #include "pch.h"
 #include "framework.h"
 #include "PredictBridge.h"
 
-#include <winsock2.h>
-#include <ws2tcpip.h>
 #include <windows.h>
 #include <cstdio>
 #include <string>
+#include <mutex>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <cstring>
+#include <sstream>
+#include <random>
 
-#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "Ws2_32.lib")
 
-using namespace std;
+#ifdef PREDICTBRIDGE_EXPORTS
+#define PREDICTBRIDGE_API __declspec(dllexport)
+#else
+#define PREDICTBRIDGE_API __declspec(dllimport)
+#endif
 
 constexpr int BUFFER_SIZE = 4096;
-constexpr int SERVER_PORT = 9999;
-const char* SERVER_IP = "127.0.0.1";
-const char* LOG_FILE = "PredictBridge.log";
-constexpr long MAX_LOG_SIZE = 1024 * 1024; // 1 MB
+static char SHARED_BUFFER[BUFFER_SIZE] = { 0 };
+static std::mutex buffer_mutex;
 
-// === Logging ===
-void LogToFile(const char* message) {
+const char* LOG_FILE = "PredictBridge.log";
+constexpr long MAX_LOG_SIZE = 1024 * 1024;
+
+static void LogToFile(const char* message) {
     FILE* check;
     fopen_s(&check, LOG_FILE, "r");
     if (check) {
@@ -41,127 +48,77 @@ void LogToFile(const char* message) {
     }
 }
 
-// === TCP Helpers ===
-bool InitializeWinsock(WSADATA& wsaData) {
-    return WSAStartup(MAKEWORD(2, 2), &wsaData) == 0;
+std::string GenerateUUID() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_int_distribution<> dis(0, 15);
+    static const char* chars = "0123456789abcdef";
+
+    std::string uuid;
+    for (int i = 0; i < 32; ++i) {
+        uuid += chars[dis(gen)];
+        if (i == 7 || i == 11 || i == 15 || i == 19) uuid += '-';
+    }
+    return uuid;
 }
 
-SOCKET CreateSocket() {
-    return socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-}
+extern "C" {
 
-bool ConnectToServer(SOCKET& sock, const char* ip, int port) {
-    sockaddr_in server{};
-    server.sin_family = AF_INET;
-    server.sin_port = htons(port);
-    inet_pton(AF_INET, ip, &server.sin_addr);
-    return connect(sock, reinterpret_cast<sockaddr*>(&server), sizeof(server)) != SOCKET_ERROR;
-}
+    PREDICTBRIDGE_API void __stdcall WriteToBridge(const char* input) {
+        WSADATA wsaData;
+        SOCKET sock = INVALID_SOCKET;
+        struct sockaddr_in server;
+        char recvBuf[BUFFER_SIZE] = { 0 };
 
-void Cleanup(SOCKET& sock) {
-    if (sock != INVALID_SOCKET) closesocket(sock);
-    WSACleanup();
-}
+        if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+            return;
 
-// === Generic TCP Send/Receive ===
-bool SendAndReceive(const char* message, char* result, int resultSize, const char* logPrefix) {
-    WSADATA wsaData;
-    SOCKET sock = INVALID_SOCKET;
-    char recvBuf[BUFFER_SIZE] = { 0 };
+        sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (sock == INVALID_SOCKET) {
+            WSACleanup();
+            return;
+        }
 
-    LogToFile((string(logPrefix) + " SENT: " + message).c_str());
+        server.sin_family = AF_INET;
+        server.sin_port = htons(50052);
+        inet_pton(AF_INET, "127.0.0.1", &server.sin_addr);
 
-    if (!InitializeWinsock(wsaData)) {
-        strncpy_s(result, resultSize, "ERROR: Winsock init failed", _TRUNCATE);
-        return false;
+        if (connect(sock, (sockaddr*)&server, sizeof(server)) == SOCKET_ERROR) {
+            closesocket(sock);
+            WSACleanup();
+            return;
+        }
+
+        std::string messageId = GenerateUUID();
+        std::ostringstream jsonMessage;
+        jsonMessage << "{\"type\":\"signal\",\"payload\":\"" << input << "\",\"message_id\":\"" << messageId << "\"}";
+
+        send(sock, jsonMessage.str().c_str(), (int)jsonMessage.str().length(), 0);
+        int bytes = recv(sock, recvBuf, sizeof(recvBuf) - 1, 0);
+
+        if (bytes > 0) {
+            recvBuf[bytes] = '\0';
+            std::lock_guard<std::mutex> lock(buffer_mutex);
+            strncpy_s(SHARED_BUFFER, recvBuf, BUFFER_SIZE - 1);
+            SHARED_BUFFER[BUFFER_SIZE - 1] = '\0';
+        }
+
+        closesocket(sock);
+        WSACleanup();
+        LogToFile(("Write: " + std::string(input)).c_str());
     }
 
-    sock = CreateSocket();
-    if (sock == INVALID_SOCKET) {
-        strncpy_s(result, resultSize, "ERROR: Socket creation failed", _TRUNCATE);
-        Cleanup(sock);
-        return false;
+    PREDICTBRIDGE_API const char* __stdcall ReadSharedBuffer() {
+        std::lock_guard<std::mutex> lock(buffer_mutex);
+        LogToFile(("Read: " + std::string(SHARED_BUFFER)).c_str());
+        return SHARED_BUFFER;
     }
 
-    if (!ConnectToServer(sock, SERVER_IP, SERVER_PORT)) {
-        strncpy_s(result, resultSize, "ERROR: Connection failed", _TRUNCATE);
-        Cleanup(sock);
-        return false;
+    PREDICTBRIDGE_API void __stdcall ClearBridge() {
+        std::lock_guard<std::mutex> lock(buffer_mutex);
+        memset(SHARED_BUFFER, 0, BUFFER_SIZE);
+        LogToFile("Buffer cleared");
     }
 
-    if (send(sock, message, (int)strlen(message), 0) == SOCKET_ERROR) {
-        strncpy_s(result, resultSize, "ERROR: Send failed", _TRUNCATE);
-        Cleanup(sock);
-        return false;
-    }
 
-    int bytes = recv(sock, recvBuf, BUFFER_SIZE - 1, 0);
-    if (bytes > 0) {
-        recvBuf[bytes] = '\0';
-        LogToFile((string(logPrefix) + " RECEIVED: " + recvBuf).c_str());
-        strncpy_s(result, resultSize, recvBuf, _TRUNCATE);
-    }
-    else {
-        strncpy_s(result, resultSize, "ERROR: No response", _TRUNCATE);
-    }
-
-    Cleanup(sock);
-    return true;
-}
-
-// === Exported Functions ===
-
-extern "C" PREDICTBRIDGE_API void __stdcall SendIndicatorSignal(
-    double s1, double s2, double s3, double s4,
-    const char* symbol, int time,
-    double open, double close, double high, double low,
-    int volume, char result[], int resultSize)
-{
-    char signalMsg[BUFFER_SIZE];
-    char candleMsg[BUFFER_SIZE];
-    char tempResult[BUFFER_SIZE];
-
-    // Format signal message
-    sprintf_s(signalMsg, sizeof(signalMsg),
-        "signal:%f,%f,%f,%f,%s,%d,%f,%f,%f,%f,%d",
-        s1, s2, s3, s4, symbol, time, open, close, high, low, volume);
-
-    // Format candle message
-    sprintf_s(candleMsg, sizeof(candleMsg),
-        "candles:%d,%f,%f,%f,%f,%d",
-        time, open, close, high, low, volume);
-
-    // Send signal message first
-    SendAndReceive(signalMsg, tempResult, sizeof(tempResult), "SIGNAL");
-    strncpy_s(result, resultSize, tempResult, _TRUNCATE);
-
-    // Send candle message second (optional: only if signal succeeded)
-    char candleResult[BUFFER_SIZE];
-    SendAndReceive(candleMsg, candleResult, sizeof(candleResult), "CANDLE");
-
-    // Optionally log or combine the responses
-    LogToFile(("FINAL RESULT: " + string(result) + " | " + candleResult).c_str());
-}
-
-
-extern "C" PREDICTBRIDGE_API void __stdcall SendCandleBatch(
-    const unsigned char* input, int inputSize,
-    unsigned char* output, int outputSize)
-{
-    string payload(reinterpret_cast<const char*>(input), inputSize);
-    string message = "candles:" + payload;
-    SendAndReceive(message.c_str(), (char*)output, outputSize, "BATCH");
-}
-
-extern "C" PREDICTBRIDGE_API void __stdcall GetCommand(char result[], int size) {
-    LogToFile("COMMAND FETCHED");
-    strncpy_s(result, size, "No command available", _TRUNCATE);
-}
-
-extern "C" PREDICTBRIDGE_API void __stdcall GetAccountInfo(char result[], int resultSize) {
-    SendAndReceive("account_info", result, resultSize, "ACCOUNT_INFO");
-}
-
-extern "C" PREDICTBRIDGE_API void __stdcall GetOpenPositions(char result[], int resultSize) {
-    SendAndReceive("open_positions", result, resultSize, "OPEN_POSITIONS");
 }

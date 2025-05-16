@@ -1,13 +1,11 @@
 {
   "configurations": [
     {
-      "inheritEnvironments": [
-        "msvc_x86"
-      ],
       "name": "x86-Release",
+      "inheritEnvironments": [ "msvc_x86" ],
       "includePath": [
         "${env.INCLUDE}",
-        "${workspaceRoot}\\**"
+        "${workspaceFolder}/**"
       ],
       "defines": [
         "WIN32",
@@ -15,7 +13,29 @@
         "UNICODE",
         "_UNICODE"
       ],
-      "intelliSenseMode": "windows-msvc-x86"
+      "intelliSenseMode": "windows-msvc-x86",
+      "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x86/cl.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17"
+    },
+    {
+      "name": "x64-Release",
+      "inheritEnvironments": [ "msvc_x64" ],
+      "includePath": [
+        "${env.INCLUDE}",
+        "${workspaceFolder}/**"
+      ],
+      "defines": [
+        "WIN64",
+        "NDEBUG",
+        "UNICODE",
+        "_UNICODE"
+      ]
+      //"intelliSenseMode": "windows-msvc-x64",
+      //"compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe",
+      //"cStandard": "c11",
+      //"cppStandard": "c++17"
     }
-  ]
+  ],
+  "version": 4
 }
